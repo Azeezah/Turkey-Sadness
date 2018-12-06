@@ -25,7 +25,7 @@ try:
   from prettytable import PrettyTable
 except ImportError as e:
   # work around for Mac OS
-  if e.startswith('Python is not installed as a framework. The Mac OS X backend will not'):
+  if str(e).startswith('Python is not installed as a framework. The Mac OS X backend will not'):
     import matplotlib as mpl
     mpl.use('TkAgg')
     import os, sys, json, math, time
@@ -56,10 +56,17 @@ def part_2a(df):
     plt.close(fig)
     return df
 
- 
-    
+def part_2c(df):
+    # TODO:  group data by year
+    '''
+    t = PrettyTable()
+    t.add_column(column=df['date'], fieldname='Year') 
+    t.add_column(column=df['Value'].mean(), fieldname='Mean')
+    t.add_column(column=df['Value'].median(), fieldname='Median')
+    print(t)
+    '''
+
 def part_3a(df):
-    
     df_2017 = df[(df['date'] > '2017-1-1') & (df['date'] <= '2017-12-31')]		# filter 2017 values
     x = np.arange(0, len(df_2017.index))
     y = df_2017['Value']
@@ -75,7 +82,7 @@ def part_3b(line, df_2017):
     print('-'*15 + " LINEAR REGRESSION PREDICTIONS " + '-'*15 + '\n')
     t = PrettyTable()    # tabulate line reg predictions
     t.add_column(column=form_dates, fieldname='Date') 
-    t.add_column(column=line, fieldname='Prediction')
+    t.add_column(column=line, fieldname='Predicted Slaughters')
     print(t)
     nov_pred = line[len(line) - 2]    # extract Nov point from linear reg. line
     print("\nPREDICTION VALUE FOR NOV-2017:\t", str(nov_pred))
@@ -91,7 +98,6 @@ def part_3c(line, df_2017):
 
 def part_3d(r_value):
     print("R_SQUARED VALUE:\t\t", r_value**2)
-    return df
 
 def part_3e(x, y, line):
     fig = plt.figure(figsize=(15,8))
@@ -109,7 +115,7 @@ def to_dataframe(file_name):
     json_df = pd.read_json(os.getcwd() + "/" + file_name)    #read json file to dataframe
     return json_df['data'].apply(pd.Series)    # turn 'data' column into its own dataframe
 
-if __name__ == "__main__":
+def analyze():
     print("\n" + "="*35 + " APPLIED DATA SCIENCE: FINAL PROJECT " + "="*35 + "\n")
     
     start = time.time()
@@ -118,7 +124,7 @@ if __name__ == "__main__":
     df = to_dataframe(filepath)
     df = part_2a(df)
     x, y,  r_value, line, df_2017 = part_3a(df)
-    
+    #part_2c(df)
     part_3b(line, df_2017)
     part_3c(line, df_2017)
     part_3d(r_value)
