@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[46]:
+# In[65]:
 
 
 """ -------------------------------------------------------------------------------------------------------
@@ -24,8 +24,8 @@ import pandas as pd
 import numpy as np
 import datetime as dt
 from scipy import stats
-from tabulate import tabulate
-    
+from prettytable import PrettyTable
+
     
 def part_2a(df):
     
@@ -37,55 +37,65 @@ def part_2a(df):
     df.plot(x='date', y='Value', style='-', figsize=(15,8), ax=ax)
     plt.xlim(pd.Timestamp('1989-01-01'), pd.Timestamp('2002-12-31'))
     
-    # Save plot to '/plots' directory
-    #plt.show(); 
-    path_to_dir = os.path.join(os.getcwd(), '.', 'plots/') 
+    path_to_dir = os.path.join(os.getcwd(), '.', 'plots/') 		# Save plot to '/plots' directory
     if not os.path.exists(path_to_dir):
         os.makedirs(path_to_dir)
-    fig.savefig(path_to_dir + '1989-2002_Values.png'); plt.close(fig)
-    
+    fig.savefig(path_to_dir + '1989-2002_Values.png'); print("Plot Saved!"); plt.close(fig)
     return df
 
-    
+ 
     
 def part_3a(df):
     
     df_2017 = df[(df['date'] > '2017-1-1') & (df['date'] <= '2017-12-31')]		# filter 2017 values
-    dates = list(df_2017['date'])
+    
     x = np.arange(0, len(df_2017.index))
     y = df_2017['Value']
     
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)		# calculate linear reg
     line = slope*x + intercept													# linear reg line  
-    return x, y, line, dates
+    return x, y, line, df_2017
 
 
-def part_3b(line, dates):
+def part_3b(line, df_2017):
     
-    
+    dates = list(df_2017['date'])
+    form_dates = [dt.datetime.strftime(date, '%b, %Y') for date in dates]		# format date objects to nice strings
     
     print('-'*15 + " LINEAR REGRESSION PREDICTIONS " + '-'*15 + '\n')
-#     for i in range(len(line)):
-#         print("Date: " + dt.datetime.strftime(dates[i], '%b, %Y') + "\t Prediciton: " + str(line[i]))
-    print(tabulate([dates, line], headers=['Date', 'Prediction'], tablefmt='orgtbl'))
-    nov_pred = line[len(line) - 2]						#extract Nov point from linear reg. line
-    print("\nPREDICTION VALUE FOR NOV-2017: \t", str(nov_pred))
+    t = PrettyTable()															# tabulate line reg predictions
+    t.add_column(column=form_dates, fieldname='Date') 
+    t.add_column(column=line, fieldname='Prediction')
+    print(t)
+    nov_pred = line[len(line) - 2]												# extract Nov point from linear reg. line
+    print("\nPREDICTION VALUE FOR NOV-2017:\t", str(nov_pred))
+   
     return
 
 
+def part_3c(line, df_2017):
+    
+    real_vals = list(df_2017['Value'])
+    real_val = real_vals[len(line) - 2]
+    nov_pred = line[len(line) - 2]
+    abs_err = abs(real_val - nov_pred)
+    print("ABSOLUTE ERROR:\t\t\t", str(abs_err))
+    
+    return real_val, nov_pred
 
-def part_3c(df):
-    return df
+
 
 def part_3d(df):
     return df
+
+
 
 def part_3e(x, y, line):
     fig = plt.figure(figsize=(15,8))
     plt.plot(x, y,'-', x, line)
     #plt.show();
     path_to_dir = os.path.join(os.getcwd(), '.', 'plots/')
-    fig.savefig(path_to_dir + 'Line_Reg.png'); plt.close(fig)
+    fig.savefig(path_to_dir + 'Line_Reg.png');print("Plot Saved!");  plt.close(fig)
     return
 
 
@@ -102,12 +112,12 @@ def to_dataframe(file_name):
 if __name__ == "__main__":
     file = 'data.json'
     df = to_dataframe(file)
-    df 					= part_2a(df)
-    x, y, line, dates 	= part_3a(df)
+    df 						= part_2a(df)
+    x, y, line, df_2017 	= part_3a(df)
     
-    part_3b(line, dates)
-#     df = part_3c(df)
-#     df = part_3d(df)
+    part_3b(line, df_2017)
+    part_3c(line, df_2017)
+    #part_3d(df)
     part_3e(x, y, line)
     
 
