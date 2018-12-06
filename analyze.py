@@ -55,13 +55,16 @@ def part_2a(df):
 
 def part_2c(df):
     # TODO:  group data by year
-    '''
+    dfy = df.groupby('year')
+    [df for df in dfy][0][1]['Value'].apply(to_float).mean()
+    means = [df[1]['Value'].apply(to_float).mean() for df in dfy]
+    medians = [df[1]['Value'].apply(to_float).median() for df in dfy]
+    
     t = PrettyTable()
-    t.add_column(column=df['date'], fieldname='Year') 
-    t.add_column(column=df['Value'].mean(), fieldname='Mean')
-    t.add_column(column=df['Value'].median(), fieldname='Median')
+    t.add_column(column=sorted(map(int, dfy.groups.keys())), fieldname='Year') 
+    t.add_column(column=means, fieldname='Mean')
+    t.add_column(column=medians, fieldname='Median')
     print(t)
-    '''
 
 def part_3a(df):
     df_2017 = df[(df['date'] > '2017-1-1') & (df['date'] <= '2017-12-31')]		# filter 2017 values
