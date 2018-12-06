@@ -1,6 +1,7 @@
 datas.json
 
 __pycache__/
+plots/
 *.py[cod]
 *.swp
 

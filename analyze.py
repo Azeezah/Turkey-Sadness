@@ -56,10 +56,17 @@ def part_2a(df):
     fig.savefig(path_to_dir + '1989-2002_Values.png'); print(".........Part 2a Plot Saved!\n"); plt.close(fig)
     return df
 
- 
-    
+def part_2c(df):
+    # TODO:  group data by year
+    '''
+    t = PrettyTable()
+    t.add_column(column=df['date'], fieldname='Year') 
+    t.add_column(column=df['Value'].mean(), fieldname='Mean')
+    t.add_column(column=df['Value'].median(), fieldname='Median')
+    print(t)
+    '''
+
 def part_3a(df):
-    
     df_2017 = df[(df['date'] > '2017-1-1') & (df['date'] <= '2017-12-31')]		# filter 2017 values
     
     x = np.arange(0, len(df_2017.index))
@@ -80,7 +87,7 @@ def part_3b(line, df_2017):
 
     t = PrettyTable()															# tabulate line reg predictions
     t.add_column(column=form_dates, fieldname='Date') 
-    t.add_column(column=line, fieldname='Prediction')
+    t.add_column(column=line, fieldname='Predicted Slaughters')
     print(t)
     nov_pred = line[len(line) - 2]												# extract Nov point from linear reg. line
     print("\nPREDICTION VALUE FOR NOV-2017:\t", str(nov_pred))
@@ -102,7 +109,6 @@ def part_3c(line, df_2017):
 
 def part_3d(r_value):
     print("R_SQUARED VALUE:\t\t", r_value**2)
-    return df
 
 
 
@@ -129,17 +135,16 @@ def to_dataframe(file_name):
     json_df = pd.read_json(os.getcwd() + "/" + file_name)	# read json file to dataframe
     return json_df['data'].apply(pd.Series)					# turn 'data' column into its own dataframe
 
-
-if __name__ == "__main__":
+def analyze():
     print("\n" + "="*25 + " APPLIED DATA SCIENCE: FINAL PROJECT " + "="*25 + "\n")
     
     start = time.time()
     
-    file							= 'data.json'
-    df 								= to_dataframe(file)
-    df 								= part_2a(df)
-    x, y,  r_value, line, df_2017 	= part_3a(df)
-    
+    filepath = 'data.json'
+    df = to_dataframe(filepath)
+    df = part_2a(df)
+    x, y,  r_value, line, df_2017 = part_3a(df)
+    #part_2c(df)
     part_3b(line, df_2017)
     part_3c(line, df_2017)
     part_3d(r_value)

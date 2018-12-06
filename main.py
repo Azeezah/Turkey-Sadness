@@ -1,18 +1,10 @@
-from urllib.request import urlopen
-from urllib.parse import urlencode
+import json
+from analyze import analyze
+from load_data import load_data
 
-params = {
-  'key': '2D8C9134-BC16-343B-8EAC-2E4349AED2A6',
-  'short_desc' : "TURKEYS, YOUNG, SLAUGHTER, FI - SLAUGHTERED, MEASURED IN HEAD",
-  'year__GE' : '1989',
-  'year__LE' : '2018',
-  'state_alpha' : 'VA',
-  'freq_desc' : 'MONTHLY', 
-}
-
-url = "http://quickstats.nass.usda.gov/api/api_GET/?" + urlencode(params)
-with urlopen(url) as x:
-  data = x.read()
-
-with open("data.json", 'wb') as f:
-  f.write(data)
+if __name__ == '__main__':
+  with open('keys.json') as f:
+    key = json.loads(f.read())['usda-api-key']
+  load_data(key)
+  analyze()
+  
