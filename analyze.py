@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[79]:
+# In[22]:
 
 
 """ -------------------------------------------------------------------------------------------------------
@@ -44,9 +44,12 @@ def part_2a(df):
     df['Value'] = df['Value'].apply(to_float)					# convert 'Value' column to float
 
     fig, ax = plt.subplots()
-    df.plot(x='date', y='Value', style='-', figsize=(15,8), ax=ax)
+    df.plot(x='date', y='Value', style='-', figsize=(15,8), ax=ax, color='xkcd:aqua')
     plt.xlim(pd.Timestamp('1989-01-01'), pd.Timestamp('2002-12-31'))
-    
+    plt.title('1989 - 2002 Turkey Slaughters')
+    plt.xlabel('Year')
+    plt.ylabel('Number of Turkeys')
+    #plt.show()
     path_to_dir = os.path.join(os.getcwd(), '.', 'plots/') 		# Save plot to '/plots' directory
     if not os.path.exists(path_to_dir):
         os.makedirs(path_to_dir)
@@ -105,8 +108,13 @@ def part_3d(r_value):
 
 def part_3e(x, y, line):
     fig = plt.figure(figsize=(15,8))
-    plt.plot(x, y,'-', x, line)								# plot everthing on the same figure
-
+    l1, l2 = plt.plot(x, line,'--', x, y)								# plot everthing on the same figure
+    plt.title('Turkey Slaughters in 2017')
+    plt.xlabel('Month')
+    plt.ylabel('Number of Turkeys')
+    plt.xticks(x, ["Feb", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"])
+    plt.setp(l1, linewidth=2, color="xkcd:aquamarine")  # line1 is thick and red
+    plt.setp(l2, linewidth=1, color='xkcd:turquoise')  # line2 is thinner and green
     path_to_dir = os.path.join(os.getcwd(), '.', 'plots/')	# Save to plots folder
     fig.savefig(path_to_dir + 'Line_Reg.png'); print("\n.........Part 3e Plot Saved!"); plt.close(fig)
     return
