@@ -15,18 +15,27 @@
 
 """
 
-# import matplotlib as mpl
-# mpl.use('TkAgg')
+try:
+  import os, sys, json, math, time
+  import matplotlib.pyplot as plt
+  import pandas as pd
+  import numpy as np
+  import datetime as dt
+  from scipy import stats
+  from prettytable import PrettyTable
+except ImportError as e:
+  # work around for Mac OS
+  if e.startswith('Python is not installed as a framework. The Mac OS X backend will not'):
+    import matplotlib as mpl
+    mpl.use('TkAgg')
+    import os, sys, json, math, time
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+    import datetime as dt
+    from scipy import stats
+    from prettytable import PrettyTable
 
-import os, sys, json, math, time
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-import datetime as dt
-from scipy import stats
-from prettytable import PrettyTable
-
-    
 def part_2a(df):
     # add 'year' to 'reference period'(month) for full date
     df['date'] = df['reference_period_desc'] + df['year']
