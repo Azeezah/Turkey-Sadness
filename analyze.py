@@ -57,11 +57,9 @@ def part_2a(df):
     return df
 
 def part_2c(df):
-    # TODO:  group data by year
     dfy = df.groupby('year')
-    [df for df in dfy][0][1]['Value'].apply(to_float).mean()
-    means = [df[1]['Value'].apply(to_float).mean() for df in dfy]
-    medians = [df[1]['Value'].apply(to_float).median() for df in dfy]
+    means = [df[1]['Value'].mean() for df in dfy]
+    medians = [df[1]['Value'].median() for df in dfy]
     
     t = PrettyTable()
     t.add_column(column=sorted(map(int, dfy.groups.keys())), fieldname='Year') 
@@ -147,7 +145,7 @@ def analyze():
     df = to_dataframe(filepath)
     df = part_2a(df)
     x, y,  r_value, line, df_2017 = part_3a(df)
-    #part_2c(df)
+    part_2c(df)
     part_3b(line, df_2017)
     part_3c(line, df_2017)
     part_3d(r_value)
