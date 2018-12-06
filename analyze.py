@@ -15,8 +15,8 @@
 
 """
 
-# import matplotlib as mpl
-# mpl.use('TkAgg')
+import matplotlib as mpl
+mpl.use('TkAgg')
 
 import os, sys, json, math, time
 import matplotlib.pyplot as plt
